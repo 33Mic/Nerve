@@ -13,7 +13,7 @@ export default function Page() {
 			<main className={styles.main}>
 				<h1>Your challenge is:</h1>
 				<h2 id="challenge">{genChallenge(challenges.length)}</h2>
-				<Link href="/"> 
+				<Link href="../camera"> 
 					{/*Camera Button*/}
 					<button className={styles.button}>Camera</button>
 				</Link>
