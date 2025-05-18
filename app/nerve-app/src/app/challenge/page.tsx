@@ -1,6 +1,6 @@
 import Link from "next/link";
-import styles from "../page.module.css"
 import challenges from "./challenges.json"
+import { Button } from "@/components/ui/button";
 
 export default function Page() {
 	const genChallenge = (numChallenges: number) => {
@@ -9,17 +9,21 @@ export default function Page() {
 	};
 
 	return (
-		<div className={styles.page}>
-			<main className={styles.main}>
+		<div className="flex justify-center items-center h-screen border-3 border-red-600">
+			<main className="flex flex-col m-auto w-auto gap-[2px] items-center justify-center p-[10px] border-3 border-green-600">
 				<h1>Your challenge is:</h1>
 				<h2 id="challenge">{genChallenge(challenges.length)}</h2>
 				<Link href="../camera"> 
 					{/*Camera Button*/}
-					<button className={styles.button}>Camera</button>
+					<Button size="default">
+						Camera
+					</Button>
 				</Link>
 				<Link href="/"> 
 					{/*Bail Button*/}
-					<button className={styles.button}>Bail</button>
+					<Button size="default">
+						Bail
+					</Button>
 				</Link>
 			</main>
 		</div>
