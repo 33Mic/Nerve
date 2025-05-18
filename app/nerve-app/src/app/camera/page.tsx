@@ -62,7 +62,7 @@ export default function Page() {
 			{/* Top division - webcam and canvas */}
 			 <div className='relative h-full w-full'>
 				<div className='relative h-full w-full'>
-					<Webcam audio={true} ref={webcamRef} 
+					<Webcam muted={true} audio={true} ref={webcamRef} 
 					mirrored={mirrored}
 					className='h-full w-full object-contain p-2'
 					/>
