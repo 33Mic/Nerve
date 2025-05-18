@@ -8,11 +8,9 @@ import { Camera, Video } from "lucide-react";
 import { ModeToggle } from "@/components/theme-toggle";
 import { toast } from 'sonner';
 
-type Props = {};
-
 let stopTimeout: any = null;
 
-export default function Page(props: Props) {
+export default function Page() {
 	const webcamRef = useRef<Webcam>(null);
 
 	// state
@@ -41,11 +39,11 @@ export default function Page(props: Props) {
 						recordedChunks.current.push(e.data);
 					}
 				};
-				mediaRecorderRef.current.onstart = (e) => {
+				mediaRecorderRef.current.onstart = () => {
 					setIsRecording(true);
 					recordedChunks.current = [];
 				}
-				mediaRecorderRef.current.onstop = (e) => {
+				mediaRecorderRef.current.onstop = () => {
 					setIsRecording(false);
 					const recordedBlob = new Blob(recordedChunks.current, { type: 'video/webm' })
 					const videoURL = URL.createObjectURL(recordedBlob);
