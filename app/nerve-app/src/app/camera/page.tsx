@@ -21,7 +21,9 @@ export default function Page() {
 	const mirrored: boolean = facingMode == "user";
 
 	const videoConstraints = {
-		facingMode: facingMode
+		facingMode: facingMode,
+		width: {min: 640, ideal: 1920, max:1920},
+		height: {min: 480, ideal: 1080, max: 1080}
 	};
 	
 	// initialize the media recorder
@@ -64,20 +66,18 @@ export default function Page() {
 
 	return (
 		<div className='flex flex-row h-screen'>
-			{/* Top division - webcam and canvas */}
+			{/* Left division - webcam*/}
 			 <div className='relative h-full w-full'>
-				<div className='relative h-full w-full'>
-					<Webcam 
-						muted={true} 
-						audio={true} 
-						ref={webcamRef} 
-						mirrored={mirrored}
-						videoConstraints={videoConstraints}
-						className='h-full w-full object-contain p-2'
-					/>
-				</div>
+				<Webcam 
+					muted={true} 
+					audio={true} 
+					ref={webcamRef} 
+					mirrored={mirrored}
+					videoConstraints={videoConstraints}
+					className='h-full w-full min-h-full min-w-full object-cover p-2'
+				/>
 			 </div>
-			 {/* Bottom division - container for buttons */}
+			 {/* Right division - container for buttons */}
 			 <div className="flex flex-row flex-1">
 				<div className="border-primary/5 border-2 max-w-xs flex flex-col gap-2 justify-between shadow-md rounded-md p-4">
 					{/* Top Section */}
