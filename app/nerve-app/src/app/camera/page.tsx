@@ -151,7 +151,7 @@ export default function Page() {
 	}
 
 	function toggleCamera() {
-		setFacingMode((prev) => (prev) === "user" ? "environment" : "user");
+		setFacingMode(facingMode == "user" ? "environment" : "user");
 	}
 	
 	function startRecording() {
