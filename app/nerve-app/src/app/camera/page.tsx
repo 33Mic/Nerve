@@ -21,7 +21,7 @@ export default function Page() {
 	const [facingMode, setFacingMode] = useState<"user" | "environment">("user");
 
 	const videoConstraints = {
-		facingMode: "environment"
+		facingMode: facingMode
 	};
 	
 	// initialize the media recorder
