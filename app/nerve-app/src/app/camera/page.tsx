@@ -4,7 +4,7 @@ import Webcam from 'react-webcam';
 import { useEffect, useRef, useState } from 'react';
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { Camera, Video } from "lucide-react";
+import { Camera, SwitchCamera, Video } from "lucide-react";
 import { ModeToggle } from "@/components/theme-toggle";
 import { toast } from 'sonner';
 
@@ -12,13 +12,18 @@ let stopTimeout: any = null;
 
 export default function Page() {
 	const webcamRef = useRef<Webcam>(null);
+	const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+	const recordedChunks = useRef<Blob[]>([]);
 
 	// state
 	const mirrored = true;
 	const [isRecording, setIsRecording] = useState<boolean>(false);
+	const [facingMode, setFacingMode] = useState<"user" | "environment">("user");
 
-	const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-	const recordedChunks = useRef<Blob[]>([]);
+	const videoConstraints = {
+		facingMode: "environment"
+	};
+	
 	// initialize the media recorder
 	useEffect(() => {
 		if(webcamRef && webcamRef.current && webcamRef.current.video) {
@@ -58,13 +63,17 @@ export default function Page() {
 	}, [webcamRef]);
 
 	return (
-		<div className='flex h-screen'>
+		<div className='flex flex-row h-screen'>
 			{/* Top division - webcam and canvas */}
 			 <div className='relative h-full w-full'>
 				<div className='relative h-full w-full'>
-					<Webcam muted={true} audio={true} ref={webcamRef} 
-					mirrored={mirrored}
-					className='h-full w-full object-contain p-2'
+					<Webcam 
+						muted={true} 
+						audio={true} 
+						ref={webcamRef} 
+						mirrored={mirrored}
+						videoConstraints={videoConstraints}
+						className='h-full w-full object-contain p-2'
 					/>
 				</div>
 			 </div>
@@ -74,7 +83,11 @@ export default function Page() {
 					{/* Top Section */}
 					<div className="flex flex-col gap-2">
 						<ModeToggle />
-						<Separator />
+						<Separator className='my-2'/>
+						<Button variant='outline' size='icon'
+							onClick={toggleCamera}>
+							<SwitchCamera />
+						</Button>
 					</div>
 
 					{/* Middle section */}
@@ -89,13 +102,6 @@ export default function Page() {
 						onClick={userPromptRecord}>
 							<Video />
 						</Button>
-					</div>
-
-					<Separator className="my-2"/>
-					{/* Bottom Section */}
-					<div className="flex flex-col gap-2">
-						<Separator/>
-
 					</div>
 
 				</div>
@@ -142,6 +148,10 @@ export default function Page() {
 			startRecording();
 		}
 
+	}
+
+	function toggleCamera() {
+		setFacingMode((prev) => (prev) === "user" ? "environment" : "user");
 	}
 	
 	function startRecording() {
