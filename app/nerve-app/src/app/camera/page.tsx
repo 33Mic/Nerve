@@ -16,9 +16,9 @@ export default function Page() {
 	const recordedChunks = useRef<Blob[]>([]);
 
 	// state
-	const mirrored = true;
 	const [isRecording, setIsRecording] = useState<boolean>(false);
 	const [facingMode, setFacingMode] = useState<"user" | "environment">("user");
+	const mirrored: boolean = facingMode == "user";
 
 	const videoConstraints = {
 		facingMode: facingMode
