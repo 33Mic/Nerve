@@ -3,9 +3,11 @@ import challenges from "./challenges.json"
 import { Button } from "@/components/ui/button";
 
 export default function Page() {
+	let curChal;
 	const genChallenge = (numChallenges: number) => {
 		const chNum: number =  Math.floor(Math.random() * numChallenges);
-		return challenges[`${chNum}`]["text"];
+		curChal = challenges[`${chNum}`];
+		return curChal["text"];
 	};
 
 	return (
@@ -13,14 +15,16 @@ export default function Page() {
 			<main className="flex flex-col m-auto w-auto gap-[2px] items-center justify-center p-[10px] border-3 border-green-600">
 				<h1>Your challenge is:</h1>
 				<h2 id="challenge">{genChallenge(challenges.length)}</h2>
-				<Link href="../camera"> 
+				<Link href={{
+					pathname: "../camera",
+					query: curChal}}> 
 					{/*Camera Button*/}
 					<Button>
 						Camera
 					</Button>
 				</Link>
 				<Link href="/"> 
-					{/*Bail Button*/}
+					{/*Bail Button ONLY AVAILABLE AFTER AUTHENTICATION*/}
 					<Button>
 						Bail
 					</Button>

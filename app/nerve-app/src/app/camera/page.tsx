@@ -7,10 +7,14 @@ import { Button } from "@/components/ui/button";
 import { Camera, SwitchCamera, Video } from "lucide-react";
 import { ModeToggle } from "@/components/theme-toggle";
 import { toast } from 'sonner';
+import { useSearchParams } from 'next/navigation';
 
 let stopTimeout: any = null;
 
 export default function Page() {
+	const searchParams = useSearchParams();
+	const challenge = searchParams.get("text");
+
 	const webcamRef = useRef<Webcam>(null);
 	const mediaRecorderRef = useRef<MediaRecorder | null>(null);
 	const recordedChunks = useRef<Blob[]>([]);
@@ -64,6 +68,10 @@ export default function Page() {
 			}
 		}
 	}, [webcamRef]);
+
+	useEffect(() => {
+		console.log(challenge);
+	}, [challenge])
 
 	return (
 		<div className='flex flex-col h-screen'>
