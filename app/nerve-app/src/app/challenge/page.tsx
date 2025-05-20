@@ -15,13 +15,13 @@ export default function Page() {
 				<h2 id="challenge">{genChallenge(challenges.length)}</h2>
 				<Link href="../camera"> 
 					{/*Camera Button*/}
-					<Button size="default">
+					<Button>
 						Camera
 					</Button>
 				</Link>
 				<Link href="/"> 
 					{/*Bail Button*/}
-					<Button size="default">
+					<Button>
 						Bail
 					</Button>
 				</Link>
