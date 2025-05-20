@@ -65,47 +65,44 @@ export default function Page() {
 	}, [webcamRef]);
 
 	return (
-		<div className='flex flex-row h-screen'>
-			{/* Left division - webcam*/}
-			 <div className='relative h-full w-full'>
+		<div className='flex flex-col h-screen'>
+			{/* Top division - webcam*/}
+			<div className='relative flex-1 min-h-0'>
 				<Webcam 
 					muted={true} 
 					audio={true} 
 					ref={webcamRef} 
 					mirrored={mirrored}
 					videoConstraints={videoConstraints}
-					className='h-full w-full min-h-full min-w-full object-cover p-2'
+					className='h-full w-full object-cover p-2'
 				/>
-			 </div>
-			 {/* Right division - container for buttons */}
-			 <div className="flex flex-row flex-1">
-				<div className="border-primary/5 border-2 max-w-xs flex flex-col gap-2 justify-between shadow-md rounded-md p-4">
-					{/* Top Section */}
-					<div className="flex flex-col gap-2">
-						<ModeToggle />
-						<Separator className='my-2'/>
-						<Button variant='outline' size='icon'
-							onClick={toggleCamera}>
-							<SwitchCamera />
-						</Button>
-					</div>
-
-					{/* Middle section */}
-					<div className="flex flex-col gap-2">
-						<Separator className="my-2"/>
-						<Button variant={'outline'} size={'icon'}
-						onClick={userPromptScreenshot}>
-							<Camera />
-						</Button>
-						<Separator className="my-2"/>
-						<Button variant={isRecording ? 'destructive' : 'outline'} size={'icon'}
-						onClick={userPromptRecord}>
-							<Video />
-						</Button>
-					</div>
-
+			</div>
+			{/* Bottom division - container for buttons */}
+			<div className="absolute bottom-0 left-1/2 -translate-x-1/2 flex flex-row justify-center items-center border-primary/5 border-2 shadow-md rounded-md p-4 bg-background">
+				{/* Left Section */}
+				<div className="flex flex-row gap-2">
+					<ModeToggle />
+					<Button variant='outline' size='icon'
+						onClick={toggleCamera}>
+						<SwitchCamera />
+					</Button>
 				</div>
-			 </div>
+
+				
+				<Separator className='mx-2' orientation='vertical'/>
+
+				{/* Right section */}
+				<div className="flex flex-row gap-2">
+					<Button variant={'outline'} size={'icon'}
+					onClick={userPromptScreenshot}>
+						<Camera />
+					</Button>
+					<Button variant={isRecording ? 'destructive' : 'outline'} size={'icon'}
+					onClick={userPromptRecord}>
+						<Video />
+					</Button>
+				</div>
+			</div>
 		</div>
 	)
 
