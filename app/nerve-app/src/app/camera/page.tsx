@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Webcam from 'react-webcam';
 import { useEffect, useRef, useState } from 'react';
 import { Separator } from "@/components/ui/separator";
@@ -9,7 +9,13 @@ import { ModeToggle } from "@/components/theme-toggle";
 import { toast } from 'sonner';
 // import { useSearchParams } from 'next/navigation';
 
+import { createClient } from '@supabase/supabase-js';
+
 let stopTimeout: any = null;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+// process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabase = createClient(supabaseUrl!, supabaseKey!);
 
 export default function Page() {
 	// const searchParams = useSearchParams();
@@ -116,23 +122,40 @@ export default function Page() {
 	)
 
 	// handler functions
-	function userPromptScreenshot() {
+	async function userPromptScreenshot() {
 		// take picture
 		if(!webcamRef.current) {
 			toast('Camera not found. Please refresh');
-		} else {
-			const imgSrc = webcamRef.current.getScreenshot();
-			console.log(imgSrc);
-			const blob = base64toBlob(imgSrc);
-
-			const url = URL.createObjectURL(blob);
-			const a = document.createElement('a');
-			a.href = url;
-			a.download = `${formatDate(new Date())}.png`;
-			a.click();
+			return;
+		} 
+		const imgSrc = webcamRef.current.getScreenshot();
+		if (!imgSrc) {
+			toast('Failed to capture screenshot. Please try again');
+			return;
 		}
-		// save it to downloads
-		//TODO: We will display it
+		
+		const fileName = `${formatDate(new Date())}.png`;
+		const blob = base64toBlob(imgSrc);
+		const {data, error} = await supabase.storage.from('images').upload(fileName, blob, {
+			contentType: 'image/png',
+		});
+
+		if (error) {
+			console.log(error);
+			console.error('Upload error:', error);
+			toast('Failed to upload image.');
+		} else {
+			console.log('Upload success:', data);
+			toast('Screenshot uploaded to Supabase Storage');
+		}
+			
+
+			// // If you wanted to download it
+			// const url = URL.createObjectURL(blob);
+			// const a = document.createElement('a');
+			// a.href = url;
+			// a.download = `${formatDate(new Date())}.png`;
+			// a.click();
 	}
 
 	function userPromptRecord() {
