@@ -61,15 +61,29 @@ export default function Page() {
 					setIsRecording(true);
 					recordedChunks.current = [];
 				}
-				mediaRecorderRef.current.onstop = () => {
+				mediaRecorderRef.current.onstop = async () => {
 					setIsRecording(false);
+					// const videoURL = URL.createObjectURL(recordedBlob);
+					
+					// const a = document.createElement('a');
+					// a.href = videoURL;
+					// a.download = `${formatDate(new Date())}.webm`;
+					// a.click();
+					
+					const fileName = `${formatDate(new Date())}.webm`;
 					const recordedBlob = new Blob(recordedChunks.current, { type: 'video/webm' })
-					const videoURL = URL.createObjectURL(recordedBlob);
+					const {data, error} = await supabase.storage.from('videos').upload(fileName, recordedBlob, {
+						contentType: 'video/webm',
+					});
 
-					const a = document.createElement('a');
-					a.href = videoURL;
-					a.download = `${formatDate(new Date())}.webm`;
-					a.click();
+					if (error) {
+						console.log(error);
+						console.error('Upload error:', error);
+						toast('Failed to upload video.');
+					} else {
+						console.log('Upload success:', data);
+						toast('Video uploaded to Supabase Storage');
+					}
 				}
 			}
 		}
@@ -170,7 +184,7 @@ export default function Page() {
 			mediaRecorderRef.current.requestData();
 			clearTimeout(stopTimeout);
 			mediaRecorderRef.current.stop();
-			toast('Recording saved to downloads');
+			toast('Uploading recording');
 		} else {
 			// if not recording
 				// start recording
