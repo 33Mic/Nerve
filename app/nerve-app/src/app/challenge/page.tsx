@@ -13,8 +13,8 @@ export default function Page() {
 	return (
 		<div className="flex justify-center items-center h-screen border-3 border-red-600">
 			<main className="flex flex-col m-auto w-auto gap-[2px] items-center justify-center p-[10px] border-3 border-green-600">
-				<h1>Your challenge is:</h1>
-				<h2 id="challenge">{genChallenge(challenges.length)}</h2>
+				<h1 className="text-center font-bold">Your challenge is:</h1>
+				<h2 className="text-center" id="challenge">{genChallenge(challenges.length)}</h2>
 				<Link href={{
 					pathname: "../camera",
 					query: curChal}}> 
@@ -31,5 +31,5 @@ export default function Page() {
 				</Link>
 			</main>
 		</div>
-	)
+	);
 }

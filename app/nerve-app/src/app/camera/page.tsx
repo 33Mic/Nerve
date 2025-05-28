@@ -94,7 +94,7 @@ export default function Page() {
 	// }, [challenge])
 
 	return (
-		<div className='flex flex-col h-screen'>
+		<div className='flex flex-col h-full min-h-screen'>
 			{/* Top division - webcam*/}
 			<div className='relative flex-1 min-h-0'>
 				<Webcam 
@@ -103,7 +103,7 @@ export default function Page() {
 					ref={webcamRef} 
 					mirrored={mirrored}
 					videoConstraints={videoConstraints}
-					className='h-full w-full object-cover p-2'
+					className='absolute inset-0 h-full w-full object-cover p-2'
 				/>
 			</div>
 			{/* Bottom division - container for buttons */}
