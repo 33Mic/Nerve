@@ -1,8 +1,18 @@
 import Link from "next/link";
 import challenges from "./challenges.json"
 import { Button } from "@/components/ui/button";
+import { createClient } from "@/utils/supabase/server";
 
-export default function Page() {
+
+export default async function Page() {
+
+	// Middleware handles the route protection, but this is for user detail fetching
+	const supabase = await createClient();
+
+	const { data: { user }} = await supabase.auth.getUser();
+
+	console.log(await supabase.from('users').select(user?.email));
+
 	let curChal;
 	const genChallenge = (numChallenges: number) => {
 		const chNum: number =  Math.floor(Math.random() * numChallenges);
