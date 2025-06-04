@@ -2,6 +2,7 @@ import Link from "next/link";
 import challenges from "./challenges.json"
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/utils/supabase/server";
+import { redirect } from "next/navigation";
 
 
 export default async function Page() {
@@ -17,6 +18,10 @@ export default async function Page() {
 		console.error(error);
 	} else {
 		console.log(userDetails);
+	}
+
+	if(userDetails.user_bailed) {
+		await redirect("../bail");
 	}
 
 	let curChal;
@@ -39,8 +44,7 @@ export default async function Page() {
 						Camera
 					</Button>
 				</Link>
-				<Link href="/"> 
-					{/*Bail Button ONLY AVAILABLE AFTER AUTHENTICATION*/}
+				<Link href="../bail"> 
 					<Button>
 						Bail
 					</Button>
