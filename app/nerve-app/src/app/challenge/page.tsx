@@ -11,7 +11,13 @@ export default async function Page() {
 
 	const { data: { user }} = await supabase.auth.getUser();
 
-	console.log(await supabase.from('users').select(user?.email));
+	const {data: userDetails, error } = await supabase.from('users').select('*').eq('userid', user?.id).single();
+	
+	if (error) {
+		console.error(error);
+	} else {
+		console.log(userDetails);
+	}
 
 	let curChal;
 	const genChallenge = (numChallenges: number) => {
