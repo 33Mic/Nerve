@@ -1,4 +1,6 @@
 import { createClient } from "@/utils/supabase/server";
+import { PostgrestError } from "@supabase/supabase-js";
+import { redirect } from "next/navigation";
 
 export default async function Bail() {
 	// This is a temporary solution
@@ -8,21 +10,31 @@ export default async function Bail() {
 
 	const supabase = await createClient();
 	const { data: { user }} = await supabase.auth.getUser();
-	const {data: userDetails, error: selectErr } = await supabase.from('users').select('*').eq('userid', user?.id).single();
+	const {data: userDetails, error: selectErr } = await supabase.from('users').select('*').eq('user_id', user?.id).single();
+	const { data: challenge } = await supabase.from('challenges').select().eq('chal_id', userDetails.cur_chal_id).single();
 	
-	if (selectErr) {
-		console.error(selectErr);
-	} else {
-		console.log(userDetails);
+	function handleFunction(error : PostgrestError | Error | null) {
+		if (error) {
+			console.error(error);
+		} else {
+			console.log(userDetails);
+		}
 	}
-	const { error: updateErr } =  await supabase.from('users').update({ user_bailed: true}).eq('userid', user?.id);
-	
-	if(updateErr) {
-		console.error(updateErr);
-	} else {
-		console.log(userDetails);
-	}
+	await handleFunction(selectErr);
+	const { error: updateErr } =  await supabase.from('users').update({ user_bailed: true}).eq('user_id', user?.id);
+	await handleFunction(updateErr);
 
+	// TODO: check against timestamp, if user's current time is past the current challenge end date,
+	if(new Date(challenge.chal_end_time).getTime() < new Date().getTime()) {
+		// delete the challenge
+		await supabase.from('challenges').delete().eq('chal_id', userDetails.cur_chal_id);
+		// set user cur_challenge_id to NULL and reset the bail
+		await supabase.from('users').update({ user_bailed: false, cur_chal_id: null}).eq('user_id', user?.id);
+
+		redirect('../challenge');
+		console.log('Unbailed a user');
+	}
+	
 
 	return (
 		<div className="flex justify-center items-center h-screen border-3 border-red-600">

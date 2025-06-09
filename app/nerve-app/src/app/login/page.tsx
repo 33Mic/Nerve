@@ -55,10 +55,10 @@ return (
 								<FormControl>
 									<Input placeholder="example@gmail.com" {...field} />
 								</FormControl>
+								<FormMessage />
 									<FormDescription>
 										{/* This is your user email. */}
 									</FormDescription>
-								<FormMessage />
 							</FormItem>
 						)}
 					/>
@@ -69,7 +69,7 @@ return (
 							<FormItem>
 								<FormLabel>Password</FormLabel>
 								<FormControl>
-									<Input placeholder='123abc' {...field} />
+									<Input type='password' placeholder='123abc' {...field} />
 								</FormControl>
 								<FormDescription>
 									{/* This is your password. */}
