@@ -19,11 +19,12 @@ export async function login(formData: FormData) {
   const { error } = await supabase.auth.signInWithPassword(data)
 
   if (error) {
-    redirect('/error')
+    console.log(error);
+    redirect('/error');
   }
 
-  revalidatePath('/', 'layout')
-  redirect('/')
+  revalidatePath('/core', 'layout')
+  redirect('/core')
 }
 
 export async function signup(formData: FormData) {
@@ -44,6 +45,6 @@ export async function signup(formData: FormData) {
     redirect('/error');
   }
 
-  revalidatePath('/', 'layout');
-  redirect('/');
+  revalidatePath('/core', 'layout');
+  redirect('/core');
 }

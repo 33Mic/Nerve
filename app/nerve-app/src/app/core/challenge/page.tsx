@@ -69,14 +69,14 @@ export default async function Page() {
 				<h1 className="text-center font-bold">Your challenge is:</h1>
 				<h2 className="text-center" id="challenge">{challengeText}</h2>
 				<Link href={{
-					pathname: "../camera",
+					pathname: "/core/camera",
 					query: curChal}}> 
 					{/*Camera Button*/}
 					<Button>
 						Camera
 					</Button>
 				</Link>
-				<Link href="../bail"> 
+				<Link href="/core/bail"> 
 					<Button>
 						Bail
 					</Button>

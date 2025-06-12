@@ -1,4 +1,4 @@
-import { logout } from "../logout/actions";
+import { logout } from "../../logout/actions";
 import { createClient } from '@/utils/supabase/server';
 import { Button } from '@/components/ui/button';
 
