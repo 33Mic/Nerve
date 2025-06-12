@@ -9,8 +9,12 @@ body {
   overflow-x: hidden;
 }
 
+#landingpagemain {
+  /* all: unset; */
+}
+
 main {
-  display: flex;
+  /* display: flex;
   flex-direction: column;
   width: auto;
   border: 3px;
@@ -18,7 +22,7 @@ main {
   gap: calc(var(--spacing) * 2);
   padding: calc(var(--spacing) * 5);
   border-radius: var(--radius-md);
-  background-color: color-mix(in oklab, var(--color-gray-500) /* oklch(55.1% 0.027 264.364) = #6a7282 */ 50%, transparent);  
+  background-color: color-mix(in oklab, var(--color-gray-500) oklch(55.1% 0.027 264.364) = #6a7282 50%, transparent);   */
 }
 
 body {

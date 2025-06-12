@@ -1,6 +1,6 @@
 # Nerve Planning Sheet
 ### Pitch
-Nerve v0 is a webapp aiming to give bored people bite-sized challenges they can do right now within walking distances of them. It's instant, zero-signup, and drives foot traffic to local businesses.
+Nerve v0 is a webapp aiming to give bored people bite-sized challenges they can do right now within walking distances of them. It's quick to get set up, and drives foot traffic to local businesses.
 
 ### Target Audience and where we come in
 - Some people struggle to find productive things to do throughout their day. That's why we implement a simple solution: A one-click stop for short challenges to pass time and (maybe) push you outside your comfort zone!

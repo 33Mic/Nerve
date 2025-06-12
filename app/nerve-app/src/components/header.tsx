@@ -88,6 +88,7 @@ export const HeroHeader = () => {
                                 </Button>
                                 <Button
                                     asChild
+                                    variant="outline"
                                     size="sm"
                                     className={cn(isScrolled && 'lg:hidden')}>
                                     <Link href="#">
@@ -97,6 +98,7 @@ export const HeroHeader = () => {
                                 <Button
                                     asChild
                                     size="sm"
+                                    variant="outline"
                                     className={cn(isScrolled ? 'lg:inline-flex' : 'hidden')}>
                                     <Link href="#">
                                         <span>Get Started</span>
