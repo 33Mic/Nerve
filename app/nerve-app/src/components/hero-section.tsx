@@ -1,11 +1,13 @@
 import React from 'react'
 import Link from 'next/link'
-import { ChevronRight } from 'lucide-react'
+// import { ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import { TextEffect } from '@/components/ui/text-effect'
 import { AnimatedGroup } from '@/components/ui/animated-group'
 import { HeroHeader } from './header'
+import Features from './features-2'
+import FooterSection from './footer'
 
 const transitionVariants = {
     item: {
@@ -119,7 +121,7 @@ export default function HeroSection() {
                                             size="lg"
                                             className="rounded-xl px-5 text-base">
                                             <Link href="#link">
-                                                <span className="text-nowrap">Start Now</span>
+                                                <span className="text-nowrap">Let&apos;s Start!</span>
                                             </Link>
                                         </Button>
                                     </div>
@@ -163,6 +165,14 @@ export default function HeroSection() {
                             </div>
                         </AnimatedGroup>
                     </div>
+                </section>
+                <section className="bg-background pb-4 pt-16">
+                    <Features/>
+                </section>
+                <section className="bg-background">
+                    <hr className="mx-5"/>
+
+                    <FooterSection/>
                 </section>
                 {/* <section className="bg-background pb-16 pt-16 md:pb-32">
                     <div className="group relative m-auto max-w-5xl px-6">
