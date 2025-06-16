@@ -37,29 +37,27 @@ export default async function Page() {
 
 	// 1. If the user does not have a challenge, generate a new challenge and add it to the database table
 	if(userDetails.cur_chal_id == null) {
-		const { data , error} = await supabase.from('challenges').insert({
-			user_id: userDetails.user_id,
-			chal_end_time: (() => {
-				const end = new Date();
-				// Set to user's local end of day (23:59:59.999)
-				end.setHours(23, 59, 59, 999);
-				return end;
-
-			})(),
-			chal_text: genChallenge(challenges.length)
-		}).select();
-
-		if(error)
-			await console.log(error);
-
-		// then link it to the user's current challenge
-		await supabase.from('users').update({'cur_chal_id': data?.[0]?.chal_id}).eq('user_id', userDetails.user_id);
-		await console.log("Added user challenge to DB")
-
-		challengeText = data?.[0]?.chal_text;
+		await createUserChallenge();
 	} else {
-		// 2. If the user has a challenge, read them their current challenge
-		const { data: challenge } = await supabase.from('challenges').select('chal_text').eq('chal_id', userDetails.cur_chal_id).single();
+		// 2. If the user has a challenge:
+		const { data: challenge } = await supabase.from('challenges').select().eq('chal_id', userDetails.cur_chal_id).single();
+		
+		// 2a. Check if it is completed
+		if(challenge.chal_complete == true) {
+			createUserChallenge();
+			redirect('./');
+		}
+		
+		// 2b. Check if it has expired
+		else if(new Date(challenge.chal_end_time).getTime() < new Date().getTime()) {
+			// delete the challenge and add a new one
+			await supabase.from('challenges').delete().eq('chal_id', userDetails.cur_chal_id);
+			createUserChallenge();
+
+			redirect('./');
+		}
+
+		// read them their current challenge
 		challengeText = challenge?.chal_text;
 	}
 
@@ -84,4 +82,27 @@ export default async function Page() {
 			</main>
 		</div>
 	);
+
+	async function createUserChallenge() {
+		const { data, error } = await supabase.from('challenges').insert({
+			user_id: userDetails.user_id,
+			chal_end_time: (() => {
+				const end = new Date();
+				// Set to user's local end of day (23:59:59.999)
+				end.setHours(23, 59, 59, 999);
+				return end;
+
+			})(),
+			chal_text: genChallenge(challenges.length)
+		}).select();
+
+		if (error)
+			await console.log(error);
+
+		// then link it to the user's current challenge
+		await supabase.from('users').update({ 'cur_chal_id': data?.[0]?.chal_id }).eq('user_id', userDetails.user_id);
+		await console.log("Added user challenge to DB");
+
+		challengeText = data?.[0]?.chal_text;
+	}
 }
