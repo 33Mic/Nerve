@@ -9,13 +9,14 @@ import { ModeToggle } from "@/components/theme-toggle";
 import { toast } from 'sonner';
 // import { useSearchParams } from 'next/navigation';
 
-import { createClient } from '@supabase/supabase-js';
+// import { createClient } from '@supabase/supabase-js';
+import { uploadScreenshot, uploadVideo } from './actions';
 
 let stopTimeout: any = null;
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+// const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+// const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 // process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const supabase = createClient(supabaseUrl!, supabaseKey!);
+// const supabase = createClient(supabaseUrl!, supabaseKey!);
 
 export default function Page() {
 	// const searchParams = useSearchParams();
@@ -70,19 +71,15 @@ export default function Page() {
 					// a.download = `${formatDate(new Date())}.webm`;
 					// a.click();
 					
-					const fileName = `${formatDate(new Date())}.webm`;
-					const recordedBlob = new Blob(recordedChunks.current, { type: 'video/webm' })
-					const {data, error} = await supabase.storage.from('videos').upload(fileName, recordedBlob, {
-						contentType: 'video/webm',
-					});
+					// Set up for data download and retrieval
+					const { url } = await uploadVideo({ recordedChunks });
 
-					if (error) {
-						console.log(error);
-						console.error('Upload error:', error);
+					if (!url) {
+						console.error('Upload error');
 						toast('Failed to upload video.');
 					} else {
-						console.log('Upload success:', data);
-						toast('Video uploaded to Supabase Storage');
+						console.log('Upload success');
+						toast('Video uploaded');
 					}
 				}
 			}
@@ -147,20 +144,15 @@ export default function Page() {
 			toast('Failed to capture screenshot. Please try again');
 			return;
 		}
-		
-		const fileName = `${formatDate(new Date())}.png`;
-		const blob = base64toBlob(imgSrc);
-		const {data, error} = await supabase.storage.from('images').upload(fileName, blob, {
-			contentType: 'image/png',
-		});
+		// upload Screenshot and make all necessary connections
+		const { url } = await uploadScreenshot({ imgSrc });
 
-		if (error) {
-			console.log(error);
-			console.error('Upload error:', error);
+		if (!url) {
+			console.error('Upload error');
 			toast('Failed to upload image.');
 		} else {
-			console.log('Upload success:', data);
-			toast('Screenshot uploaded to Supabase Storage');
+			console.log('Upload success');
+			toast('Screenshot uploaded');
 		}
 			
 
@@ -211,30 +203,18 @@ export default function Page() {
 	}
 }
 
-function formatDate(d: Date) {
-	const formattedDate = 
-	[
-		(d.getMonth() + 1).toString().padStart(2, "0"),
-		d.getDate().toString().padStart(2, "0"),
-		d.getFullYear(),
-	]
-	.join("-") + " " +
-	[
-		d.getHours().toString().padStart(2, "0"),
-		d.getMinutes().toString().padStart(2, "0"),
-		d.getSeconds().toString().padStart(2, "0"),
-	].join("-");
-	return formattedDate;
-}
-
-function base64toBlob(base64Data: any) {
-	const byteCharacters = atob(base64Data.split(",")[1]);
-	const arrayBuffer = new ArrayBuffer(byteCharacters.length);
-	const byteArray = new Uint8Array(arrayBuffer);
-
-	for( let i = 0; i < byteCharacters.length; i++) {
-		byteArray[i] = byteCharacters.charCodeAt(i);
-	}
-
-	return new Blob([arrayBuffer], { type: "image/png"}); // Specify the image type here
-}
+// function formatDate(d: Date) {
+// 	const formattedDate = 
+// 	[
+// 		(d.getMonth() + 1).toString().padStart(2, "0"),
+// 		d.getDate().toString().padStart(2, "0"),
+// 		d.getFullYear(),
+// 	]
+// 	.join("-") + " " +
+// 	[
+// 		d.getHours().toString().padStart(2, "0"),
+// 		d.getMinutes().toString().padStart(2, "0"),
+// 		d.getSeconds().toString().padStart(2, "0"),
+// 	].join("-");
+// 	return formattedDate;
+// }
