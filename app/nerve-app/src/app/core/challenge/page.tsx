@@ -22,7 +22,7 @@ export default async function Page() {
 
 	// if the user is bailed then simply take them to the bail page
 	if(userDetails.user_bailed) {
-		await redirect("../bail");
+		await redirect("/core/bail");
 	}
 
 	let curChal;
