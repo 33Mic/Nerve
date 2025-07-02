@@ -24,14 +24,20 @@ export default async function Bail() {
 	const { error: updateErr } =  await supabase.from('users').update({ user_bailed: true}).eq('user_id', user?.id);
 	await handleFunction(updateErr);
 
+	if (!challenge) {
+		await supabase.from('users').update({ user_bailed: false, cur_chal_id: null}).eq('user_id', user?.id);
+		redirect('/core/challenge');
+		console.log('Unbailed a user');
+	}
+
 	// check against timestamp, if user's current time is past the current challenge end date,
-	if(new Date(challenge.chal_end_time).getTime() < new Date().getTime()) {
+	else if(new Date(challenge.chal_end_time).getTime() < new Date().getTime()) {
 		// delete the challenge
 		await supabase.from('challenges').delete().eq('chal_id', userDetails.cur_chal_id);
 		// set user cur_challenge_id to NULL and reset the bail
 		await supabase.from('users').update({ user_bailed: false, cur_chal_id: null}).eq('user_id', user?.id);
 
-		redirect('../challenge');
+		redirect('/core/challenge');
 		console.log('Unbailed a user');
 	}
 	

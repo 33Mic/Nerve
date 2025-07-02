@@ -38,6 +38,7 @@ export default async function Page() {
 	// 1. If the user does not have a challenge, generate a new challenge and add it to the database table
 	if(userDetails.cur_chal_id == null) {
 		await createUserChallenge();
+		await redirect('/core/challenge');
 	} else {
 		// 2. If the user has a challenge:
 		const { data: challenge } = await supabase.from('challenges').select().eq('chal_id', userDetails.cur_chal_id).single();
@@ -103,6 +104,6 @@ export default async function Page() {
 		await supabase.from('users').update({ 'cur_chal_id': data?.[0]?.chal_id }).eq('user_id', userDetails.user_id);
 		await console.log("Added user challenge to DB");
 
-		challengeText = data?.[0]?.chal_text;
+		challengeText = await data?.[0]?.chal_text;
 	}
 }
